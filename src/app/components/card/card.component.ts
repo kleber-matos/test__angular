@@ -9,40 +9,48 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 })
 export class CardComponent implements OnInit{
 
-  pokemon: PokemonData | any
+  pokemon: PokemonData 
 
 
   photo: string = 'https://www.pngmart.com/files/22/Charmander-Pokemon-PNG-Transparent.png'
-  attributes: string[]= ['Fire', 'Rock']
+  attributes: string[]= []
 
   constructor(
     private service: PokemonService
-  ){}
+  ){
+    this.pokemon = {
+      id: 0,
+      name: '',
+      sprites: {
+        front_default: ''
+      },
+      types:[]
+    }
+  }
 
 //poke = 'https://pokeapi.co/api/v2/pokemon/bulbasaur'
 
 
   ngOnInit(): void {
-    this.service.getPkemon("charizard").subscribe(
+    this.getPokemon('pikachu')
+  }
+
+  getPokemon(seachName: string){
+    console.log(seachName)
+
+    this.service.getPkemon(seachName).subscribe(
       {
         next: (res) => {
 
           this.pokemon = {
             id: res.id,
-            name: res.name,
+            name: res.name.toUpperCase(),
             sprites: res.sprites,
             types: res.types
           }
-
-          console.log(res)
-          console.log(res.id)
-          console.log(res.name)
-          console.log(res.sprites.front_default)
-          console.log(res.types)
-
-        },
-        error: (err) => console.log(err)
+        }
       }
     )
   }
+
 }
